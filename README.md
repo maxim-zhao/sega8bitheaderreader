@@ -210,28 +210,28 @@ some defy any explanation.
 
    2. Game Gear
 
-   All but the last three digits are used to signify the licensee, ie. the company
+      All but the last three digits are used to signify the licensee, ie. the company
 credited with the copyright in the game and which was licensed by Sega to
 develop for the Game Gear.
 
-   For 03 Sega games, the final three digits follow this pattern:
+      For 03 Sega games, the final three digits follow this pattern:
    
-   Value | Size
+      Value | Size
 --|--
 1xx      |32KB
 2xx      |128KB
 3xx, 4xx |256KB+
 
-   03 Sega games get a prefix of G- (apparently following the scheme used for SG
+      03 Sega games get a prefix of G- (apparently following the scheme used for SG
 and SMS cartridge games). Non-Sega games get a T- prefix (perhaps signifying
 "Third-party"?).
 
-   3rd party games seem to have either 7 or 8 as the final digit. Games with a
+      3rd party games seem to have either 7 or 8 as the final digit. Games with a
 Japan country code always have 7; games with an International country code
 always have 8; Export games have either. There are a few exceptions, none of
 which comply with the normal patterns.
 
-   The remaining two digits generally seem to count up from 01, in BCD. Not many
+      The remaining two digits generally seem to count up from 01, in BCD. Not many
 companies got past 01 or 02 though.
 
 5. Version
