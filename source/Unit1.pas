@@ -422,7 +422,7 @@ begin
     TempStr:='$'+IntToHex(RegionAndCartSize and $f,1)+' (';
     case NumPages of
     -1: TempStr:=TempStr+'invalid';
-    0: TempStr:=TempStr+'4KB';
+    0: TempStr:=TempStr+'8KB';
     else
       TempStr:=TempStr+IntToStr(NumPages*16)+'KB'
     end;
