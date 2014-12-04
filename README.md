@@ -101,41 +101,44 @@ Offset $7ff0:           54 4D 52 20 53 45 47 41 20 20 E2 16 26 70 00 40
 7. Checksum range (0) ------------------------------------------------'
 ```
 1. TMR SEGA
+
    8 byte string @ $7ff0
 
-The export SMS BIOS requires this string. Japanese systems and the GG don't.
+   The export SMS BIOS requires this string. Japanese systems and the GG don't.
 
 2. Unknown word
+
    2 bytes @ $7ff8
 
-Looks like it was reserved but never used. It's often $0000, $2020 or $FFFF, all
-of which are "nothing" values, $20 being ASCII space.
+   Looks like it was reserved but never used. It's often $0000, $2020 or $FFFF, all
+   of which are "nothing" values, $20 being ASCII space.
 
-There might be a pattern in GG games - there seems to be a sequence counting up
-from 0000 to 0141, without much repetition (except at low values) or large gaps.
-
+   There might be a pattern in GG games - there seems to be a sequence counting up
+   from 0000 to 0141, without much repetition (except at low values) or large gaps.
+   
 3. Checksum
+
    Word @ $7ffa
 
-Checksumming is done by summing the bytes in the given range (see 7. Checksum
-range), starting with 0 or the previous value when checksumming over more than
-one range. The result is held in a word (two byte variable), so $FFFF+$01=$0000.
-It's stored in Intel byte order, as the Z80 is little-endian, so $16E2 is stored
-as E2 16.
+   Checksumming is done by summing the bytes in the given range (see 7. Checksum
+   range), starting with 0 or the previous value when checksumming over more than
+   one range. The result is held in a word (two byte variable), so $FFFF+$01=$0000.
+   It's stored in Intel byte order, as the Z80 is little-endian, so $16E2 is stored
+   as E2 16.
 
-The export SMS BIOS requires a valid checksum.
+   The export SMS BIOS requires a valid checksum.
 
-The Game Gear BIOS does not check the checksum; nor does the Japanese SMS BIOS.
-Games only expected to play on these systems tend not to have valid checksums in
-their headers.
+   The Game Gear BIOS does not check the checksum; nor does the Japanese SMS BIOS.
+   Games only expected to play on these systems tend not to have valid checksums in
+   their headers.
 
-3.1 Sega checksum for Codemasters games
+   1. Sega checksum for Codemasters games
 
-The checksumming in a real SMS depends on the use of the Sega mapper. Since the
-Codemasters games don't use that mapper, the checksum routine thinks it is
-checking every byte of the rom when it's really only checking the first 32KB.
+      The checksumming in a real SMS depends on the use of the Sega mapper. Since the
+      Codemasters games don't use that mapper, the checksum routine thinks it is
+      checking every byte of the rom when it's really only checking the first 32KB.
 
-This paragraph is just for your entertainment, and isn't particularly important.
+      This paragraph is just for your entertainment, and isn't particularly important.
 I spent many hours trying to figure out exactly which pages of Codemasters
 cartridges are checksummed when the BIOS tries and fails to page in the whole
 ROM. After trying 10 or so combinations I decided to use a brute-force method.
@@ -150,209 +153,163 @@ update until I changed one setting. So I changed the first one to page 1... and
 that was the correct answer. Yes, all that hard work and it happened to be the
 first value I tried.
 
-So, the pages which are actually checksummed when the BIOS tries to checksum a
+      So, the pages which are actually checksummed when the BIOS tries to checksum a
 256KB-checksum-range Codemasters cartridge are:
 
-Page 0 ($0000 to $3FFF) x 15
-Page 1 (minus Sega header - $4000 to $7FEF) x 1
+      - Page 0 ($0000 to $3FFF) x 15
+      - Page 1 (minus Sega header - $4000 to $7FEF) x 1
 
-In other words, the Codemasters mapper (which uses writes to $0000, $4000 and
+      In other words, the Codemasters mapper (which uses writes to $0000, $4000 and
 $8000 instead of $fffd, $fffe and $ffff for much the same effect, except without
-maintaining the first 256 bytes) returns page 0 when bank 2 is read, before any
+maintaining the first 1024 bytes) returns page 0 when bank 2 is read, before any
 valid paging is done; and the BIOS uses bank 2 for paging when trying to read
 above 32KB when calculating the checksum.
 
 4. Product code
+
    2.5 bytes @ $7ffc
 
-It's a BCD big-endian word stored at $7ffc, plus the high nibble of $7ffe
+   It's a BCD big-endian word stored at $7ffc, plus the high nibble of $7ffe
 which is not BCD. So, a product word stored as 12 34 5 decodes to 53412, and 78
 90 A to 109078.
 
-4.1 Master System
+   1. Master System
 
-For SMS games, the last four digits are in these ranges:
-Range      Meaning
-0500-0599  Japanese C-5xx
-1300-1399  Japanese G-13xx
-3901       Parker Borthers - their game codes are actually 43x0 but two have
-           this number internally and the third has 0000.
-4001-4084  The Sega Card
-4501-4584  The Sega Cartridge
-5051-5123  The Mega Cartridge
-5500-5501  The Mega Plus Cartridge
-6001-6003  (and 5044) The Combo Cartridge
-7001-7124  The Two-Mega Cartridge
-7500-7506  The Two-Mega Plus Cartridge
-8001-8008  The 3-Dimensional Mega Cartridge - some of which are two-mega carts :)
-9001-9035  The Four-Mega Cartridge
-9500-9501  The Four-Mega Plus Cartridge
+      For SMS games, the last four digits are in these ranges:
+      
+      Range |Meaning
+      ------|-------
+      0500-0599  |Japanese C-5xx
+1300-1399  |Japanese G-13xx
+3901       |Parker Borthers - their game codes are actually 43x0 but two have this number internally and the third has 0000.
+4001-4084  |The Sega Card
+4501-4584  |The Sega Cartridge
+5051-5123  |The Mega Cartridge
+5500-5501  |The Mega Plus Cartridge
+6001-6003  (and 5044) |The Combo Cartridge
+7001-7124  |The Two-Mega Cartridge
+7500-7506  |The Two-Mega Plus Cartridge
+8001-8008  |The 3-Dimensional Mega Cartridge - some of which are two-mega carts :)
+9001-9035  |The Four-Mega Cartridge
+9500-9501  |The Four-Mega Plus Cartridge
 
-3rd-party releases have a five-digit product number starting with 2, with the
+      3rd-party releases have a five-digit product number starting with 2, with the
 last four digits following the above pattern. They have 2 stored in the high
 nibble of the version byte. Note that there is overlap between the numbers - for
 example, Populous = 27014 and California Games = 7014, both have 7014 in their
 product word fields.
 
-A lot of games don't bother to store this code at all, 0000 being most common
+      A lot of games don't bother to store this code at all, 0000 being most common
 value to put there instead.
 
-It is important not to take the rom's product code as absolutely correct - there
+      It is important not to take the rom's product code as absolutely correct - there
 are a lot of games where it's just plain wrong (although often, it's only
 slightly different to the correct one). Some store it backwards, some store it 
 in hex instead of BCD, some (eg. GG Jeopardy!) have completely wrong values and 
 some defy any explanation.
 
-4.2 Game Gear
+   2. Game Gear
 
-All but the last three digits are used to signify the licensee, ie. the company
+   All but the last three digits are used to signify the licensee, ie. the company
 credited with the copyright in the game and which was licensed by Sega to
-develop for the Game Gear. These are the values I've found, for those two or
-three digits:
+develop for the Game Gear.
 
- 02: Sega of America                                      (1)
- 03: Sega Japan                                           (1)
- 11: Taito
- 14: Namco
- 15: SunSoft
- 22: Micronet
- 23: Vic Tokai/SIMS                                       (2)
- 25: NCS                                                  (2)
- 26: Sigma Enterprises                                    (2)
- 28: Genki                                                (2)
- 32: Wolf Team                                            (2)
- 33: Kaneko                                               (2)
- 44: Sanritsu,SIMS                                        (3)
- 45: Game Arts/Studio Alex                                (2)
- 48: Tengen,Time Warner                                   (3)
- 49: Telenet Japan                                        (2)
- 50: EA
- 51: SystemSoft                                           (2)
- 52: Microcabin
- 53: Riverhill Soft
- 54: ASCII Corp.                                          (2)
- 60: Victor/Loriciel/Infogrames                           (2)
- 65: Tatsuya Egama/Syueisya/Toei Anumaition/Tsukuda Ideal (2)
- 66: Compile
- 68: GRI                                                  (2)
- 70: Virgin
- 79: US Gold
- 81: Acclaim
- 83: GameTek
- 87: Mindscape
- 88: Domark
- 93: Sony
-100: THQ
-103: SNK
-104: Microprose                                           (2)
-112: Disney                                               (2)
-125: Beam Software P/L
-133: Bandai
-139: Viacom
-149: Infocom/Gremlin                                      (2)
-151: Infogrames
-154: Technos Japan Corp.                                  (2)
+   For 03 Sega games, the final three digits follow this pattern:
+   
+   Value | Size
+--|--
+1xx      |32KB
+2xx      |128KB
+3xx, 4xx |256KB+
 
-(1) These are a guess. No 02 games have Japanese-only country codes, and some of
-    them credit SOA instead of just Sega. 03 games have all three country codes,
-    but mostly Japan. Both 02 and 03 usually just have (c) Sega.
-
-(2) These companies apparently only released one GG game using their license.
-    That or they botched the header :) Some also released some games via Sega.
-    Since there's only one, it's impossible to know which company had the
-    licence if more than one is credited.
-
-(3) These have several games released by each of the companies mentioned, with a
-    single change from one to another as the numbers increase. I think this
-    might be because the second company bought out the first, and used their
-    licence under the parent company's name.
-
-For 03 Sega games, the final three digits follow this pattern:
-1xx       32KB
-2xx       128KB
-3xx, 4xx  256KB+
-
-03 Sega games get a prefix of G- (apparently following the scheme used for SG
+   03 Sega games get a prefix of G- (apparently following the scheme used for SG
 and SMS cartridge games). Non-Sega games get a T- prefix (perhaps signifying
 "Third-party"?).
 
-3rd party games seem to have either 7 or 8 as the final digit. Games with a
+   3rd party games seem to have either 7 or 8 as the final digit. Games with a
 Japan country code always have 7; games with an International country code
-always have 8; Export games gave either. There are a few exceptions, none of
+always have 8; Export games have either. There are a few exceptions, none of
 which comply with the normal patterns.
 
-The remaining two digits generally seem to count up from 01, in BCD. Not many
+   The remaining two digits generally seem to count up from 01, in BCD. Not many
 companies got past 01 or 02 though.
 
 5. Version
+
    Low nibble of $7ffe
 
-Generally 0, for a few games where an alternate version exists this is generally
+   Generally 0, for a few games where an alternate version exists this is generally
 incremented by 1 for the newer version.
 
 6. Country code
+
    High nibble of $7fff
 
-I lifted the country code definitions from Bock's checksummer, since it's based
+   I lifted the country code definitions from Bock's checksummer, since it's based
 on official Sega information... :)
 
-Value  System/region
-$3     SMS Japan
-$4     SMS Export
-$5     GG Japan
-$6     GG Export
-$7     GG International
+   Value | System/region
+-|-
+$3 |   SMS Japan
+$4 |   SMS Export
+$5 |   GG Japan
+$6 |   GG Export
+$7 |   GG International
 
-As usual, some games don't have it (eg. GG Madden '96), or have the wrong value
+   As usual, some games don't have it (eg. GG Madden '96), or have the wrong value
 (eg. GG Tesserae). If it's a GG code then the program won't check the checksum.
 
-The export SMS BIOS requires a value of $4. All other BIOSes do not check the
+   The export SMS BIOS requires a value of $4. All other BIOSes do not check the
 region.
 
 7. Checksum range
+
    Low nibble of $7fff
 
-This specifies what ranges of the rom to include in the checksum. The following
+   This specifies what ranges of the rom to include in the checksum. The following
 values are recognised by the US SMS BIOS version 1.3:
 
-Value  Rom size  Range 1  Range 2        Comment
-$a         8KB   0-$1ff0  -              Unused
-$b        16KB   0-$3ff0  -              Unused
-$c        32KB   0-$7ff0  -
-$d        48KB   0-$bff0  -              Unused
-$e        64KB   0-$7ff0  $8000-$10000   Rarely used
-$f       128KB   0-$7ff0  $8000-$20000
-$0       256KB   0-$7ff0  $8000-$40000
-$1       512KB   0-$7ff0  $8000-$80000   Rarely used
-$2         1MB   0-$7ff0  $8000-$100000  Unused
+   Value | Rom size | Range 1 | Range 2        | Comment
+   ------|----------|---------|----------------|------
+$a |       8KB | 0-$1ff0 | -             | Unused
+$b |      16KB | 0-$3ff0 | -             | Unused
+$c |      32KB | 0-$7ff0 | - |
+$d |      48KB | 0-$bff0 | -             | Unused
+$e |      64KB | 0-$7ff0 | $8000-$10000  | Rarely used
+$f |     128KB | 0-$7ff0 | $8000-$20000 |
+$0 |     256KB | 0-$7ff0 | $8000-$40000 |
+$1 |     512KB | 0-$7ff0 | $8000-$80000  | Rarely used
+$2 |       1MB | 0-$7ff0 | $8000-$100000 | Unused
 
-The unused ranges may not be acceptable to later BIOS revisions. Since the 48KB
+   The unused ranges may not be acceptable to later BIOS revisions. Since the 48KB
 range will include the header, care must be taken to cancel the effect of adding
 the correct checksum to the header, since this will affect the resultant
 checksum.
 
-I've never seen any nibbles other than 0, 1, C, E and F (except in japanese SMS
+   I've never seen any nibbles other than 0, 1, C, E and F (except in japanese SMS
 roms with bad headers (eg. SMS Rygar), and in GG The Pro Yakyuu '91). In Bock's
 checksummer, he has a whole range of values, notably with E = 64KB, but the one
 E SMS rom I know (Great Ice Hockey) wants a 128KB range, and the only E GG rom
 (Battleship) is 64KB... As far as I know, range 1 is only used in the European
 release of  Chuck Rock II.
 
-The range nibble is reported as "Checksummed rom size".
+   The range nibble is reported as "Checksummed rom size".
 
 
 How the Codemasters header works
 ---
 
-Offset  Type  Meaning
-$7FE0   Byte  Number of rom pages over which to calculate the checksum
-$7FE1   Byte  Day
-$7FE2   Byte  Month
-$7FE3   Byte  Year
-$7FE4   Byte  Hour (24 hour clock)
-$7FE5   Byte  Minute
-$7FE6   Word  Checksum
-$7FE8   Word  $10000 - checksum
+Offset | Type | Meaning
+-------|------|-----
+$7FE0 |  Byte | Number of rom pages over which to calculate the checksum
+$7FE1 |  Byte | Day
+$7FE2 |  Byte | Month
+$7FE3 |  Byte | Year
+$7FE4 |  Byte | Hour (24 hour clock)
+$7FE5 |  Byte | Minute
+$7FE6 |  Word | Checksum
+$7FE8 |  Word | $10000 - checksum
+
 $7FEA-$7FEF are all zero.
 
 $7FE0 is $10 for a 256KB rom and $20 for a 512KB rom.
