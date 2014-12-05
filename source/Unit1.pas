@@ -336,6 +336,7 @@ end;
 procedure TForm1.DisplayFileInfo(f:TFileStream;filename:string);
 var
   MyTreeNode:TTreeNode;
+  fs : TFileStream;
 begin
   with TreeView1.Items do begin
 
@@ -349,7 +350,11 @@ begin
     // Add child value: CRC32
     AddChild(MyTreeNode,'CRC32 = '+CRCFile(f)).ImageIndex:=1;
 
-    AddChild(MyTreeNode,'Date and time = '+DateTimeToStr(FileDateToDateTime(FileAge(filename)))).ImageIndex:=3; // Add child value: date
+    // FullSum
+    AddChild(MyTreeNode,'Fullsum = $'+IntToHex(CalcChecksum(f,0,f.Size,0),4)).ImageIndex:=1;
+
+    // Add child value: date
+    AddChild(MyTreeNode,'Date and time = '+DateTimeToStr(FileDateToDateTime(FileAge(filename)))).ImageIndex:=3;
 
   end;
 end;
