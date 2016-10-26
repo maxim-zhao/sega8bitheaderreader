@@ -217,10 +217,10 @@ develop for the Game Gear.
       For 03 Sega games, the final three digits follow this pattern:
    
       Value | Size
---|--
-1xx      |32KB
-2xx      |128KB
-3xx, 4xx |256KB+
+      ------|-----
+   1xx      |32KB
+   2xx      |128KB
+   3xx, 4xx |256KB+
 
       03 Sega games get a prefix of G- (apparently following the scheme used for SG
 and SMS cartridge games). Non-Sega games get a T- prefix (perhaps signifying
@@ -249,12 +249,12 @@ incremented by 1 for the newer version.
 on official Sega information... :)
 
    Value | System/region
--|-
-$3 |   SMS Japan
-$4 |   SMS Export
-$5 |   GG Japan
-$6 |   GG Export
-$7 |   GG International
+   ------|--------------
+      $3 |   SMS Japan
+      $4 |   SMS Export
+      $5 |   GG Japan
+      $6 |   GG Export
+      $7 |   GG International
 
    As usual, some games don't have it (eg. GG Madden '96), or have the wrong value
 (eg. GG Tesserae). If it's a GG code then the program won't check the checksum.
