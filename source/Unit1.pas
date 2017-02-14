@@ -248,6 +248,7 @@ begin
     DisplaySegaHeader(f,$1ff0,false)
   ) then DisplaySegaHeader(f,$7ff0,true);
   DisplayCodemastersHeader(f);
+  DisplayBIOSCompatibility(f);
 
   // Set SelectedIndex to ImageIndex, so when selected the image doesn't change
   for i:=0 to TreeView1.Items.Count-1 do TreeView1.Items[i].SelectedIndex:=TreeView1.Items[i].ImageIndex;
@@ -351,7 +352,7 @@ begin
     AddChild(MyTreeNode,'CRC32 = '+CRCFile(f)).ImageIndex:=1;
 
     // FullSum
-    AddChild(MyTreeNode,'Fullsum = $'+IntToHex(CalcChecksum(f,0,f.Size,0),4)).ImageIndex:=1;
+    AddChild(MyTreeNode,'Fullsum = '+IntToHex(CalcChecksum(f,0,f.Size,0),4)).ImageIndex:=1;
 
     // Add child value: date
     AddChild(MyTreeNode,'Date and time = '+DateTimeToStr(FileDateToDateTime(FileAge(filename)))).ImageIndex:=3;
@@ -548,6 +549,7 @@ begin
     // Add child value: reserved word
     AddChild(MyTreeNode,'Reserved word = '+IntToHex(UnknownValue,4)).ImageIndex:=11;
     result:=true;
+
   end;
 
 end;
@@ -559,6 +561,42 @@ var
   CheckSumCalc:integer;
   TempStr:string;
   timestamp:TDateTime;
+begin
+  if(f.Size<$7ff0) then exit;
+
+  f.Seek($7fe0,soFromBeginning);
+  f.Read(Header,sizeof(Header));
+
+  // check it seems to be a likely header
+  // I could do more checks...
+  // 0 = -0 so blank areas pass this check; they tend to fail the date encode, though.
+  if(Header.InverseChecksum = word(-Header.Checksum))
+  then with Header,TreeView1.Items do begin
+    try
+      timestamp:=EncodeDate(BCDFix(Year)+1900,BCDFix(Month),BCDFix(Day))+
+                 EncodeTime(BCDFix(Hour),BCDFix(Minute),0,0);
+      MyTreeNode:=Add(nil,'Codemasters header'); MyTreeNode.ImageIndex:=15;
+      AddChild(MyTreeNode,'Date and time = '+DateTimeToStr(timestamp)).ImageIndex:=3;
+      MyTreeNode:=AddChild(MyTreeNode,'Checksum'); MyTreeNode.ImageIndex:=7;
+      AddChild(MyTreeNode,'From header = '+IntToHex(Checksum,4)).ImageIndex:=6;
+      CheckSumCalc:=CalcCodiesChecksum(f,NumPages);
+      TempStr:='Calculated = '+IntToHex(ChecksumCalc,4)+' (';
+      if Checksum=CheckSumCalc then TempStr:=TempStr+'OK' else TempStr:=TempStr+'bad!';
+      AddChild(MyTreeNode,TempStr+')').ImageIndex:=1;
+      AddChild(MyTreeNode,'Rom size = '+IntToStr(NumPages)+' pages ('+IntToStr(NumPages*16)+'KB)').ImageIndex:=2;
+    except
+      // do nothing if date/time encoding fails because that signifies an invalid heaer
+    end;
+  end;
+end;
+
+procedure TForm1.DisplayBIOSCompatibility(f:TFileStream);
+var
+  MyTreeNode:TTreeNode;
+  Header:TCodemastersHeader;
+//  CheckSumCalc:integer;
+//  TempStr:string;
+//  timestamp:TDateTime;
 begin
   if(f.Size<$7ff0) then exit;
 
