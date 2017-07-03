@@ -177,21 +177,21 @@ which is not BCD. So, a product word stored as 12 34 5 decodes to 53412, and 78
 
       For SMS games, the last four digits are in these ranges:
       
-      Range |Meaning
-      ------|-------
-      0500-0599  |Japanese C-5xx
-1300-1399  |Japanese G-13xx
-3901       |Parker Borthers - their game codes are actually 43x0 but two have this number internally and the third has 0000.
-4001-4084  |The Sega Card
-4501-4584  |The Sega Cartridge
-5051-5123  |The Mega Cartridge
-5500-5501  |The Mega Plus Cartridge
-6001-6003  (and 5044) |The Combo Cartridge
-7001-7124  |The Two-Mega Cartridge
-7500-7506  |The Two-Mega Plus Cartridge
-8001-8008  |The 3-Dimensional Mega Cartridge - some of which are two-mega carts :)
-9001-9035  |The Four-Mega Cartridge
-9500-9501  |The Four-Mega Plus Cartridge
+      |Range |Meaning |
+      |------|--------|
+      |0500-0599  |Japanese C-5xx |
+      |1300-1399  |Japanese G-13xx
+      |3901       |Parker Borthers - their game codes are actually 43x0 but two have this number internally and the third has 0000.
+      |4001-4084  |The Sega Card
+      |4501-4584  |The Sega Cartridge
+      |5051-5123  |The Mega Cartridge
+      |5500-5501  |The Mega Plus Cartridge
+      |6001-6003  (and 5044) |The Combo Cartridge
+      |7001-7124  |The Two-Mega Cartridge
+      |7500-7506  |The Two-Mega Plus Cartridge
+      |8001-8008  |The 3-Dimensional Mega Cartridge - some of which are two-mega carts :)
+      |9001-9035  |The Four-Mega Cartridge
+      |9500-9501  |The Four-Mega Plus Cartridge
 
       3rd-party releases have a five-digit product number starting with 2, with the
 last four digits following the above pattern. They have 2 stored in the high
@@ -216,11 +216,11 @@ develop for the Game Gear.
 
       For 03 Sega games, the final three digits follow this pattern:
    
-      Value | Size
-      ------|-----
-   1xx      |32KB
-   2xx      |128KB
-   3xx, 4xx |256KB+
+      |Value | Size
+      |------|-----
+   |1xx      |32KB
+   |2xx      |128KB
+   |3xx, 4xx |256KB+
 
       03 Sega games get a prefix of G- (apparently following the scheme used for SG
 and SMS cartridge games). Non-Sega games get a T- prefix (perhaps signifying
@@ -248,13 +248,13 @@ incremented by 1 for the newer version.
    I lifted the country code definitions from Bock's checksummer, since it's based
 on official Sega information... :)
 
-   Value | System/region
-   ------|--------------
-      $3 |   SMS Japan
-      $4 |   SMS Export
-      $5 |   GG Japan
-      $6 |   GG Export
-      $7 |   GG International
+   |Value | System/region
+   |------|--------------
+   |   $3 |   SMS Japan
+   |   $4 |   SMS Export
+   |   $5 |   GG Japan
+   |   $6 |   GG Export
+   |   $7 |   GG International
 
    As usual, some games don't have it (eg. GG Madden '96), or have the wrong value
 (eg. GG Tesserae). If it's a GG code then the program won't check the checksum.
@@ -269,17 +269,17 @@ region.
    This specifies what ranges of the rom to include in the checksum. The following
 values are recognised by the US SMS BIOS version 1.3:
 
-   Value | Rom size | Range 1 | Range 2        | Comment
-   ------|----------|---------|----------------|------
-$a |       8KB | 0-$1ff0 | -             | Unused
-$b |      16KB | 0-$3ff0 | -             | Unused
-$c |      32KB | 0-$7ff0 | - |
-$d |      48KB | 0-$bff0 | -             | Unused
-$e |      64KB | 0-$7ff0 | $8000-$10000  | Rarely used
-$f |     128KB | 0-$7ff0 | $8000-$20000 |
-$0 |     256KB | 0-$7ff0 | $8000-$40000 |
-$1 |     512KB | 0-$7ff0 | $8000-$80000  | Rarely used
-$2 |       1MB | 0-$7ff0 | $8000-$100000 | Unused
+   |Value | Rom size | Range 1 | Range 2        | Comment
+   |------|----------|---------|----------------|------
+|$a |       8KB | 0-$1ff0 | -             | Unused
+|$b |      16KB | 0-$3ff0 | -             | Unused
+|$c |      32KB | 0-$7ff0 | - |
+|$d |      48KB | 0-$bff0 | -             | Unused
+|$e |      64KB | 0-$7ff0 | $8000-$10000  | Rarely used
+|$f |     128KB | 0-$7ff0 | $8000-$20000 |
+|$0 |     256KB | 0-$7ff0 | $8000-$40000 |
+|$1 |     512KB | 0-$7ff0 | $8000-$80000  | Rarely used
+|$2 |       1MB | 0-$7ff0 | $8000-$100000 | Unused
 
    The unused ranges may not be acceptable to later BIOS revisions. Since the 48KB
 range will include the header, care must be taken to cancel the effect of adding
