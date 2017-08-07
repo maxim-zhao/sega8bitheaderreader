@@ -218,9 +218,9 @@ develop for the Game Gear.
    
       |Value | Size
       |------|-----
-   |1xx      |32KB
-   |2xx      |128KB
-   |3xx, 4xx |256KB+
+      |1xx      |32KB
+      |2xx      |128KB
+      |3xx, 4xx |256KB+
 
       03 Sega games get a prefix of G- (apparently following the scheme used for SG
 and SMS cartridge games). Non-Sega games get a T- prefix (perhaps signifying
@@ -271,15 +271,15 @@ values are recognised by the US SMS BIOS version 1.3:
 
    |Value | Rom size | Range 1 | Range 2        | Comment
    |------|----------|---------|----------------|------
-|$a |       8KB | 0-$1ff0 | -             | Unused
-|$b |      16KB | 0-$3ff0 | -             | Unused
-|$c |      32KB | 0-$7ff0 | - |
-|$d |      48KB | 0-$bff0 | -             | Unused
-|$e |      64KB | 0-$7ff0 | $8000-$10000  | Rarely used
-|$f |     128KB | 0-$7ff0 | $8000-$20000 |
-|$0 |     256KB | 0-$7ff0 | $8000-$40000 |
-|$1 |     512KB | 0-$7ff0 | $8000-$80000  | Rarely used
-|$2 |       1MB | 0-$7ff0 | $8000-$100000 | Unused
+   |$a |       8KB | 0-$1ff0 | -             | Unused
+   |$b |      16KB | 0-$3ff0 | -             | Unused
+   |$c |      32KB | 0-$7ff0 | - |
+   |$d |      48KB | 0-$bff0 | -             | Unused
+   |$e |      64KB | 0-$7ff0 | $8000-$10000  | Rarely used
+   |$f |     128KB | 0-$7ff0 | $8000-$20000 |
+   |$0 |     256KB | 0-$7ff0 | $8000-$40000 |
+   |$1 |     512KB | 0-$7ff0 | $8000-$80000  | Rarely used
+   |$2 |       1MB | 0-$7ff0 | $8000-$100000 | Unused
 
    The unused ranges may not be acceptable to later BIOS revisions. Since the 48KB
 range will include the header, care must be taken to cancel the effect of adding
